@@ -69,7 +69,7 @@ require("./plugins/" + plugin);
 console.log('Plugins installed successful ✅')
 console.log('Bot connected to whatsapp ✅')
 
-let up = `*𝗧𝗛𝗔𝗥𝗨𝗦𝗛𝗔-𝗠𝗗 𝗰𝗼𝗻𝗻𝗲𝗰𝘁𝗲𝗱 𝘀𝘂𝗰𝗰𝗲𝘀𝗳𝘂𝗹𝘆✅*\𝗻\𝗻*PREFIX: ${prefix}*`;
+let up = `*𝗧𝗛𝗔𝗥𝗨𝗦𝗛𝗔-𝗠𝗗 𝗰𝗼𝗻𝗻𝗲𝗰𝘁𝗲𝗱 𝘀𝘂𝗰𝗰𝗲𝘀𝗳𝘂𝗹𝘆✅*\𝗻\𝗻*PREFIX*: ${prefix}`;
 
 conn.sendMessage(ownerNumber + "94740326138@s.whatsapp.net", { image: { url: `https://i.ibb.co/1J9Xp6gJ/304909ee1ba2d9fa.jpg` }, caption: up })
 
@@ -81,7 +81,9 @@ conn.ev.on('messages.upsert', async(mek) => {
 mek = mek.messages[0]
 if (!mek.message) return	
 mek.message = (getContentType(mek.message) === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
-if (mek.key && mek.key.remoteJid === 'status@broadcast') return
+if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_READ_STATUS === "true"){
+await conn.readMessages([mek.key])
+}
 const m = sms(conn, mek)
 const type = getContentType(mek.message)
 const content = JSON.stringify(mek.message)
